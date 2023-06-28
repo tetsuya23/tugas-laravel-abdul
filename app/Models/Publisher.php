@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Publisher extends Model
 {
+    
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'gender',
+        'phone_number',
+        'address',
+        'email'
+    ];
+    
+    
     public function books()
     {
         return $this->hasMany('App\Models\Book', 'publisher_id'); 

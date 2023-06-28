@@ -12,4 +12,5 @@ class Author extends Model
     {
         return $this->hasMany('App\Models\Book', 'author_id'); 
     }
+    protected $fillable = ['name', 'email', 'phone_number', 'address',];
 }

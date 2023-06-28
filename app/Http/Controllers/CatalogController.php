@@ -9,6 +9,10 @@ use Illuminate\Http\Response;
 
 class CatalogController extends Controller
 {
+    public function __construct()
+    {
+         $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -16,7 +20,6 @@ class CatalogController extends Controller
     {
         $catalogs = Catalog::with('books')->get();
 
-        //return $catalogs;
         return view ('admin.catalog.index', compact('catalogs'));
     }
 

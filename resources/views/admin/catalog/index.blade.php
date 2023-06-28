@@ -4,14 +4,14 @@
     
 @section('content')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class= "card-header">
                     <a href="{{ url('catalogs/create') }}"  class= "btn btn-sm btn-primary pull right ">Create New Catalog</a>
                 </div>
 
             <div class="card-body">
-                <table class="table table-bordered">
+                <table id="example2" class="table table-striped">
                     <thead>
                         <tr>
                             <th style="width: 10px">No</th>
@@ -21,27 +21,27 @@
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                <tbody>
-                    @foreach($catalogs as $key => $catalog )
-                    <tr>
-                        <td class="text-center">{{ $key+1 }}</td>
-                        <td>{{ $catalog->name }}</td>
-                        <td class="text-center">{{ count($catalog->books) }}</td>
-                        <td class="text-center" >{{date('H:i:s - d M Y', strtotime($catalog->created_at))}}</td>
-                        <td class="text-center" >
-                        <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}"  class= "btn btn-sm btn-warning btn-sm ">
-                            Edit</a>
+                    <tbody>
+                        @foreach($catalogs as $key => $catalog )
+                        <tr>
+                            <td class="text-center">{{ $key+1 }}</td>
+                            <td>{{ $catalog->name }}</td>
+                            <td class="text-center">{{ count($catalog->books) }}</td>
+                            <td class="text-center" >{{date('H:i:s - d M Y', strtotime($catalog->created_at))}}</td>
+                            <td class="text-center" >
+                            <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}"  class= "btn btn-sm btn-warning btn-sm ">
+                                Edit</a>
 
-                        <form action="{{ url('catalogs', ['id' => $catalog->id]) }}" method="post">
-                            <input class="btn btn-danger btn-sm" type="submit" value="Delete" onclick
-                            ="return confirm('Are you sure?')">
-                            @method('delete')
-                            @csrf
-                        </form>    
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+                            <form action="{{ url('catalogs', ['id' => $catalog->id]) }}" method="post">
+                                <input class="btn btn-danger btn-sm" type="submit" value="Delete" onclick
+                                ="return confirm('Are you sure?')">
+                                @method('delete')
+                                @csrf
+                            </form>    
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>
             </div>
 

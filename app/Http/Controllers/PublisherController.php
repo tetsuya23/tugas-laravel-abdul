@@ -8,17 +8,29 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
+
+
 class PublisherController extends Controller
 {
+    public function __construct()
+    {
+         $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $publishers = Publisher::with('books')->get();
+    
+        return view ('admin.publisher');
+    }
 
-        //return $request;
-        return view ('admin.publisher.index', compact('publishers'));
+    public function api() 
+    {
+        $publishers = Publisher::all();
+        $datatables = datatables()->of($publishers)->addIndexColumn();
+
+        return $datatables->make(true);
     }
 
     /**
@@ -26,7 +38,7 @@ class PublisherController extends Controller
      */
     public function create()
     {
-        return view('admin.publisher.create');
+       //
     }
 
     /**
@@ -35,24 +47,14 @@ class PublisherController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'name' => ['required'],
-            'gender' => ['required'],
-            'phone_number' => ['required'],
-            'address' => ['required'],
-            'email' => ['required'],
-
+            'name' => ['required', 'string'],
+            'gender' => ['required', 'in:L,P'],
+            'phone_number' => ['required', 'digits_between: 11,13'],
+            'address' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email'],
         ]);
-        
+        Publisher::create($request->all());
 
-        $publisher = new Publisher;
-        $publisher->name = $request->name;
-        $publisher->gender = $request->gender;
-        $publisher->phone_number = $request->phone_number;
-        $publisher->address = $request->address;
-        $publisher->email = $request->email;
-        $publisher->save();
-
-        //return $request;
         return redirect('publishers');
     }
 
@@ -78,38 +80,35 @@ class PublisherController extends Controller
      */
     public function update(Request $request, Publisher $publisher)
     {
-        $this->validate($request,[
-            'name' => ['required'],
-            'gender' => ['required'],
-            'phone_number' => ['required'],
-            'address' => ['required'],
-            'email' => ['required'],
-
+       $this->validate($request, [
+        'name' => ['required', 'string', 'max:100'],
+        'gender' => ['required', 'in:L,P'],
+        'phone_number' => ['required', 'numeric', 'digits_between:11,13'],
+        'address' => ['required', 'string', 'max:100'],
+        'email' => ['required', 'email'],
         ]);
+
         $publisher->update($request->all());
 
         //return $request;
         return redirect('publishers');
     }
 
+    public function delete($id)
+    {
+        $publisher=Publisher::find($id);
+        $publisher->delete();
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Publisher $publisher): RedirectResponse
+    public function destroy(Publisher $publisher)
     {
-        //
+       
+        $publisher->delete();
+ 
     }
 
 
-    public function __construct()
-    {
-    $this->middleware('web');
-    }
-
-
-    public function myMethod(Request $request, Publisher $publisher)
-    {
-        $value = $request->session()->get('key');
-        // ...
-    }
 }
