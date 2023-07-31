@@ -47,7 +47,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" :action="actionUrl" autocomplete="off">
+                <form method="post" :action="actionUrl" autocomplete="off" @submit="submitForm($event, data.id)">
                     <div class="modal-header">
 
                         <h4 class="modal-title">Publisher</h4>
@@ -110,7 +110,7 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
 <script type="text/javascript">
-    var actionUrl = '{{ url('publisher') }}';
+    var actionUrl = '{{ url('publishers') }}';
     var apiUrl = '{{ url('api/publishers') }}';
 
     var columns = [
@@ -130,56 +130,9 @@
             </a> `;
         }, orderable: false, width: '200px', class: 'text-center' },
     ];
-
-    var controller = new Vue({
-        el: '#controller',
-        data: {
-            datas : [],
-            data : {},
-            actionUrl,
-            apiUrl,
-            editStatus : false,
-        }, 
-        mounted: function () {
-            this.datatable();
-        },
-        methods: {
-            datatable () {
-                const _this = this;
-                _this.table = $('#datatable').DataTable({
-                    ajax : {
-                        url: _this.apiUrl,
-                        type: 'GET',
-                    },
-                    columns: columns
-                }).on('xhr', function () {
-                    _this.datas = _this.table.ajax.json().data;                
-                });
-            },
-            addData () {
-                this.data = {};
-                this.actionUrl = '{{ url('publisher') }}';
-                this.editStatus = false;
-                $('#modal-default').modal();   
-            },
-            editData (event, row) {
-                this.data = this.datas[row];
-                this.actionUrl = '{{ url('publisher') }}'+'/'+this.data.id;
-                this.editStatus = true;
-                $('#modal-default').modal();
-            },
-            deleteData (event, id) {
-
-                this.actionUrl = '{{ url('publisher') }}'+'/'+id;
-                if (confirm("Are you sure?")) {
-                    axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
-                        location.reload();
-                    });
-                }
-            }
-        }  
-    });
 </script>
+<script src="{{ asset('js/data.js') }}">
+    </script>
 
 
 <!-- CRUD VUE JS -->

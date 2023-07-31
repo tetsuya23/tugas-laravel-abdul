@@ -3,8 +3,8 @@ var controller = new Vue({
         data: {
             datas : [],
             data : {},
-            actionUrl,
-            apiUrl,
+            actionUrl:actionUrl,
+            apiUrl:actionApi,
             editStatus : false,
         }, 
         mounted: function () {

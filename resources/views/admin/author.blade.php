@@ -34,6 +34,7 @@
                                 <th class="text-left">Email</th>
                                 <th class="text-left">Phone_Number</th>
                                 <th class="text-left">Address</th>
+                                <th class="text-left">Created_at</th>
                                 <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -45,7 +46,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" :action="actionUrl" autocomplete="off">
+                <form method="post" :action="actionUrl" autocomplete="off" @submit="submitForm($event, data.id)">
                     <div class="modal-header">
 
                         <h4 class="modal-title">Author</h4>
@@ -110,9 +111,10 @@
     var columns = [
         {data: 'DT_RowIndex', class: 'text-center', orderable:true},
         {data: 'name', class: 'text-center', orderable:true},
-        {data: 'email', class: 'text-center', orderable:true},
+        {data: 'email', class: 'text-center', orderable:false},
         {data: 'phone_number', class: 'text-center', orderable:true},
-        {data: 'address', class: 'text-center', orderable:true},
+        {data: 'address', class: 'text-center', orderable:false},
+        {data: 'date', class: 'text-center', orderable:false},
         {render: function (index, row, data, meta) {
             return `
             <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})">
@@ -123,55 +125,10 @@
             </a> `;
         }, orderable: false, width: '200px', class: 'text-center' },
     ];
-
-    var controller = new Vue({
-        el: '#controller',
-        data: {
-            datas : [],
-            data : {},
-            actionUrl,
-            apiUrl,
-            editStatus : false,
-        }, 
-        mounted: function () {
-            this.datatable();
-        },
-        methods: {
-            datatable () {
-                const _this = this;
-                _this.table = $('#datatable').DataTable({
-                    ajax : {
-                        url: _this.apiUrl,
-                        type: 'GET',
-                    },
-                    columns: columns
-                }).on('xhr', function () {
-                    _this.datas = _this.table.ajax.json().data;                
-                });
-            },
-            addData () {
-                this.data = {};
-                this.actionUrl = '{{ url('authors') }}';
-                this.editStatus = false;
-                $('#modal-default').modal();   
-            },
-            editData (event, row) {
-                this.data = this.datas[row];
-                this.actionUrl = '{{ url('authors') }}'+'/'+this.data.id;
-                this.editStatus = true;
-                $('#modal-default').modal();
-            },
-            deleteData (event, id) {
-                this.actionUrl = '{{ url('authors') }}'+'/'+id;
-                if (confirm("Are you sure?")) {
-                    axios.post(this.actionUrl, {_method: 'DELETE'}).then(response => {
-                        location.reload();
-                    });
-                }
-            }
-        }  
-    });
 </script>
+<script src="{{ asset('js/data.js') }}">
+    </script>
+
 
 
 

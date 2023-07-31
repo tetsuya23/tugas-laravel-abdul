@@ -22,4 +22,6 @@ class Publisher extends Model
     {
         return $this->hasMany('App\Models\Book', 'publisher_id'); 
     }
+
+    
 }

@@ -11,7 +11,7 @@ class AuthorController extends Controller
 {
     public function __construct()
     {
-         $this->middleware('auth');
+        $this->middleware('auth');
     }
    
     /**
@@ -25,7 +25,14 @@ class AuthorController extends Controller
     public function api() 
     {
         $authors = Author::all();
-        $datatables = datatables()->of($authors)->addIndexColumn();
+
+        // foreach ($authors as $key => $author){
+        //     $author->date = convert_date($author->created_at);
+        // }
+        $datatables = datatables()->of($authors)
+                        ->addColumn ('date', function($author) {
+                            return convert_date($author->created_at);
+                        })->addIndexColumn(); 
 
         return $datatables->make(true);
     }
@@ -79,10 +86,10 @@ class AuthorController extends Controller
     public function update(Request $request, Author $author)
     {
         $this->validate($request,[
-            'name'      => ['required'],
-            'email'      => ['required'],
-            'phone_number'      => ['required'],
-            'address'      => ['required'],
+            'name' => ['required'],
+            'email' => ['required'],
+            'phone_number' => ['required'],
+            'address' => ['required'],
             
         ]);
 

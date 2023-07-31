@@ -27,7 +27,7 @@
                             <td class="text-center">{{ $key+1 }}</td>
                             <td>{{ $catalog->name }}</td>
                             <td class="text-center">{{ count($catalog->books) }}</td>
-                            <td class="text-center" >{{date('H:i:s - d M Y', strtotime($catalog->created_at))}}</td>
+                            <td class="text-center" >{{ convert_date($catalog->created_at) }}</td>
                             <td class="text-center" >
                             <a href="{{ url('catalogs/'.$catalog->id.'/edit') }}"  class= "btn btn-sm btn-warning btn-sm ">
                                 Edit</a>
